@@ -23,6 +23,18 @@ app.use('/tests', testRouter)
 app.use('/mails', sendMailRoute)
 
 
+//Admin side -------------------------
+//to create a test , 
+//theme ,
+// sendEmail ,
+// able to get user info
+
+//Pupil side 
+//to solve a test 
+//auth (such as login , signup )
+
+
+
 app.listen(3001 , ()=>{
     console.log('Server is running ')
 })

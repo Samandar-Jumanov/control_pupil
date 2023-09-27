@@ -76,7 +76,7 @@ const Login = async (request , response , next ) =>{
            username :    existingUser.username ,
            email : existingUser.email ,
            token : existingUser.token ,
-           username : existingUser.username 
+           userId : existingUser.id 
         }
         return response.json({
             message :"Logged in succefully",
