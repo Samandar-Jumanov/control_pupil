@@ -1,37 +1,67 @@
-const {Users , Test} =  require('../models/relations')
+const {Users , Test, Scores} =  require('../models/relations')
+const sequelize = require('../utils/connect-db')
 
-const SolveTest = async (request , response , next ) =>{
-    const {userId, testId , selectedAnswer } = request.body 
+
+const getUserAllScores = async (request , response , next ) =>{
+    const {userId} = request.params 
 
     try {
         const user = await Users.findByPk(userId)
+
+        if(!user){
+            return response.json({
+                message :'User not found '
+            })
+        }
+
         const userAllScores = await user.getScores()
+        return response.json({
+            userAllScores : userAllScores
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+const SolveTest = async (request , response , next ) =>{
+    const {userId, testId , selectedAnswer } = request.body 
+    let t;
+    try {
+        t =  await sequelize.transaction();
+        const user = await Users.findByPk(userId  , {transaction : t })
         if(!user){
             return response.status(401).json({
                 message :'Unauthorized'
             })
         }
 
-        const test = await Test.findByPk(testId)
+        const test = await Test.findByPk(testId , {transaction : t })
         if(!test){
             return response.json({
                 message :'Test not found '
             })
         }
-        let exactTest;
-        for (let i = 0 ; i <=userAllScores.length -1 ; i++){
-            
-            if(userAllScores[i].testId === testId){
-                console.log(userAllScores[i])
-                exactTest = userAllScores[i]
-            }
+
+        const newScore = await Scores.create({
+            userId : userId ,
+            testId : testId,
+            testCount : 0 ,
+            solvedCount : 0,
+            percetange : ''
+        } , { transaction : t })
+       
+        
+        if(selectedAnswer === test.trueAnswer){
+            newScore.testCount++
+            newScore.solvedCount++
+            await newScore.save()
+            return;
         }
-        if(selectedAnswer !== test.trueAnswer){
-          return;
-        }else {
-             exactTest.score++
-             await exactTest.save()
-        }
+        newScore.testCount++
+        await newScore.save()
+       return;
+
     } catch (error) {
         next(error)
         
@@ -39,4 +69,4 @@ const SolveTest = async (request , response , next ) =>{
 }
 
 
-module.exports = SolveTest
+module.exports = {SolveTest , getUserAllScores}
