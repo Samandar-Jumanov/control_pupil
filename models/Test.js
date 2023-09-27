@@ -16,10 +16,6 @@ const Test = sequelize.define('Test', {
         type : DataTypes.STRING,
         allowNull : false
     },
-    solvedUserId : {
-        type : DataTypes.INTEGER,
-        allowNull : false 
-    }, 
     question : {
         type : DataTypes.TEXT ,
         allowNull : false 
