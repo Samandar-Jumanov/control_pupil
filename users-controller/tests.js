@@ -2,9 +2,6 @@ const {Users , Test, Scores} =  require('../models/relations')
 const sequelize = require('../utils/connect-db')
 
 
-
-
-
 const SolveTest = async (request, response, next) => {
   const { userId, testId, selectedAnswer  , themeName } = request.body;
   let t;

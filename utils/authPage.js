@@ -1,9 +1,11 @@
+const Admin = require("../models/admin")
 
-
-const authPage = async (permissions)  =>{
-    return (request , response , next ) =>{
-        const {role} = request.body 
-        if(permissions.includes(role)){
+const authPage = async (permission)  =>{
+    return async  (request , response , next ) => {
+        const {adminId} = request.body 
+        const admin = await Admin.findByPk(adminId)
+        const role  = admin.role 
+        if(permission === role ){
             next()
         }else {
             return response.status(401).json({
