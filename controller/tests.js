@@ -29,6 +29,8 @@ const getUserAllScores = async (request , response , next ) =>{
         next(error)
     }
 }
+
+
 const SolveTest = async (request, response, next) => {
   const { userId, testId, selectedAnswer } = request.body;
   let t;
@@ -63,14 +65,11 @@ const SolveTest = async (request, response, next) => {
     if (selectedAnswer === test.trueAnswer) {
       newScore.testCount++;
       newScore.solvedCount++;
-      await newScore.save();
     } else {
       newScore.testCount++;
-      await newScore.save();
     }
-
     console.log(newScore);
-
+    await newScore.save();
     return response.json({
       message: 'Test completed',
       newScore: newScore
