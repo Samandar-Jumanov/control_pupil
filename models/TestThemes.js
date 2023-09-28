@@ -13,6 +13,10 @@ const TestThemes = sequelize.define('testTheme', {
        type : DataTypes.STRING ,
        allowNull : false 
     }, 
+    adminId : {
+        type : DataTypes.INTEGER,
+        allowNull : false 
+    }
 })
 
 

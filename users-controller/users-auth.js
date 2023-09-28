@@ -16,14 +16,17 @@ const SignUp =  async (request , response , next ) =>{
                 message :'User has already account '
             })
         }
+
         const hashedPassword = await  bcrypt.hash(password , 10)
         const token = process.env.SECRETKEY
         const  newUser = await Users.create({
                 username : username ,
                 password : hashedPassword,
                 email : email,
-                token : token 
+                token : token ,
+                role : "student"
             })
+
             const newToken = jwt.sign({userId : newUser.id}, process.env.SECRETKEY)
             newUser.token = newToken
             await newUser.save()
@@ -32,7 +35,8 @@ const SignUp =  async (request , response , next ) =>{
                 email : newUser.email ,
                 userId : newUser.id ,
                 token : newUser.token,
-                username : newUser.username 
+                username : newUser.username ,
+                role : newUser.role 
             }
             console.log(newUser)
             return response.json({

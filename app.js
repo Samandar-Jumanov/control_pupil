@@ -1,11 +1,13 @@
 const express = require('express')
 const sequelize = require('./utils/connect-db')
 const app = express()
-const usersAuthRouter = require('./routes/users-auth')
-const testRouter = require('./routes/test')
-const sendMailRoute = require('./routes/mails')
-const themesRouter = require('./routes/themes')
-
+const usersAuthRouter = require('./users-route/users-auth')
+const userTestRouter = require('./users-route/test')
+const adminTestRouter = require('./admin-router/tests')
+const adminAuthRouter = require('./admin-router/auth')
+const emailRouter = require('./admin-router/email')
+const themeRouter = require('./admin-router/theme')
+const userScoreRouter = require('./admin-router/users-score')
 
 
 sequelize.sync().then(()=>{
@@ -20,10 +22,14 @@ app.get('/', (request , response , next )=>{
 
 app.use(express.json())
 app.use('/users', usersAuthRouter)
-app.use('/tests', testRouter)
-app.use('/mails', sendMailRoute)
-app.use('/theme', themesRouter)
+app.use('/tests', userTestRouter)
 
+//admin routing 
+app.use('/admin/tests', adminTestRouter)
+app.use('/admin/auth', adminAuthRouter)
+app.use('/admin/email',emailRouter )
+app.use('/admin/theme', themeRouter)
+app.use('/admin/user-score',userScoreRouter )
 
 //Admin side -------------------------
 //to create a test , 

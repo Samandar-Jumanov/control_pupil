@@ -1,6 +1,7 @@
 const Scores = require("./Scores");
 const Test  = require("./Test");
 const TestThemes = require("./TestThemes");
+const Admin = require("./admin");
 const Users = require("./users");
 
 //test and users 
@@ -23,6 +24,30 @@ Users.hasMany(Scores, {
     as : 'scores'
 })
 
+//Admin and tests 
+Test.belongsTo(Admin , {
+    foreignKey :'adminId'
+})
+Admin.hasMany(Test, {
+    foreignKey : "adminId",
+    as :'createdTests'
+})
+
+
+
+//Admin and TestThemes
+TestThemes.belongsTo(Admin , {
+    foreignKey :'adminId'
+})
+
+
+Admin.hasMany(TestThemes , {
+    foreignKey :'adminId',
+    as :'testThemes'
+})
+
+
+
 //Themes and Tests 
 
 Test.belongsTo(TestThemes, {
@@ -34,11 +59,14 @@ TestThemes.hasMany(Test, {
     as :'tests'
 })
 
+
+
 module.exports = {
     Test, 
     Users, 
     TestThemes,
-    Scores
+    Scores,
+    Admin 
 }
 
 

@@ -12,6 +12,14 @@ const Test =  sequelize.define('Test', {
       type : DataTypes.INTEGER,
       allowNull : false 
     },
+    adminId : {
+        type : DataTypes.INTEGER,
+        allowNull : false
+    }, 
+    themeName : {
+        type : DataTypes.STRING,
+        allowNull : false 
+    },
     trueAnswer : {
         type : DataTypes.STRING,
         allowNull : false

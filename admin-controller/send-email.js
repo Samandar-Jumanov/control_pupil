@@ -6,7 +6,6 @@ const sendEmail = async (request , response , next ) =>{
 
     const email = "haad@gmail.com"
     try {
-
         const newEmail = await Emails.create({
             to : to ,
             body : body ,
@@ -41,4 +40,20 @@ const sendEmail = async (request , response , next ) =>{
     }
 }
 
-module.exports = {sendEmail}
+
+const getAllEmails = async (request , response , next ) =>{
+
+    try {
+        const allEmails =  await Emails.findAll()
+        response.status(200).json({
+            allEmails : allEmails
+        })
+        
+    } catch (error) {
+        next(error)
+    }
+
+}
+
+
+module.exports = {sendEmail , getAllEmails}

@@ -16,6 +16,10 @@ const Scores = sequelize.define('scores', {
         type : DataTypes.INTEGER,
         allowNull : false 
     }, 
+    themeName : {
+        type : DataTypes.STRING,
+        allowNull : false 
+    },
     testCount : {
         type :DataTypes.INTEGER,
         allowNull : false 

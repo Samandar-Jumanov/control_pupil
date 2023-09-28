@@ -1,36 +1,37 @@
-const { DataTypes } = require('sequelize')
-const sequelize = require('../utils/connect-db')
+const sequelize = require("../utils/connect-db");
+const  { DataTypes } = require('sequelize')
 
 
-const Users = sequelize.define('Users', {
+const Admin = sequelize.define('Admin', {
     id : {
         type : DataTypes.INTEGER,
         primaryKey : true ,
-        autoIncrement :true 
+        autoIncrement : true 
+    
     },
-    username : {
+    firstName : {
         type : DataTypes.STRING ,
         allowNull : false ,
-
+        unique : true 
+    },
+    lastName : {
+        type : DataTypes.STRING ,
+        allowNull : false 
     },
     password : {
         type : DataTypes.STRING ,
         allowNull : false 
     },
-    email : {
-        type : DataTypes.STRING,
-        allowNull : false ,
-        unique : true 
-    },
-    token : {
+    role : {
         type : DataTypes.STRING,
         allowNull : false 
     },
-    role : {
+    token : {
         type : DataTypes.STRING ,
         allowNull : false 
     }
 })
 
-module.exports = Users 
+
+module.exports = Admin 
 
