@@ -51,7 +51,7 @@ const SolveTest = async (request, response, next) => {
         testId: testId,
         testCount: 0,
         solvedCount: 0,
-        percentage: '0%'
+        percantage: '0%'
       },
       { transaction: t }
     );
