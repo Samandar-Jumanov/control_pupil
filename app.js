@@ -23,12 +23,12 @@ app.get('/', (request , response , next )=>{
 
 app.use(express.json())
 app.use('/users', usersAuthRouter) //checked all worked 
-app.use('/tests', userTestRouter)
+app.use('/tests', userTestRouter) //...
 
 //admin routing 
-app.use('/admin/tests', adminTestRouter)
+app.use('/admin/tests', adminTestRouter) //checked all worked 
 app.use('/admin/auth', adminAuthRouter) //checked all worked 
-app.use('/admin/email',emailRouter )
+app.use('/admin/email',emailRouter ) //gonna be check 
 app.use('/admin/theme', themeRouter) //checked all worked 
 app.use('/admin/user-score',userScoreRouter )
 
