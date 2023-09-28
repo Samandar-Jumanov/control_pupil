@@ -25,56 +25,57 @@ const getUserAllScores = async (request , response , next ) =>{
         next(error)
     }
 }
+const SolveTest = async (request, response, next) => {
+  const { userId, testId, selectedAnswer } = request.body;
+  let t;
+  try {
+    t = await sequelize.transaction();
 
-
-const SolveTest = async (request , response , next ) =>{
-    const {userId, testId , selectedAnswer } = request.body 
-    let t;
-    try {
-        t =  await sequelize.transaction();
-        const user = await Users.findByPk(userId  , {transaction : t })
-        if(!user){
-            return response.status(401).json({
-                message :'Unauthorized'
-            })
-        }
-
-        const test = await Test.findByPk(testId , {transaction : t })
-        if(!test){
-            return response.json({
-                message :'Test not found '
-            })
-        }
-
-        const newScore = await Scores.create({
-            userId : userId ,
-            testId : testId,
-            testCount : 0 ,
-            solvedCount : 0,
-            percantage : '0%'
-        } , { transaction : t })
-       
-        
-        if(selectedAnswer === test.trueAnswer){
-            newScore.testCount++
-            newScore.solvedCount++
-            await newScore.save()
-            return;
-        }
-        newScore.testCount++
-        await newScore.save()
-        console.log(newScore)
-       return response.json({
-        message :'Tested',
-        newScore : newScore 
-       })
-
-    } catch (error) {
-        console.log(error)
-        next(error)
-        
+    const user = await Users.findByPk(userId, { transaction: t });
+    if (!user) {
+      return response.status(401).json({
+        message: 'Unauthorized'
+      });
     }
-}
+
+    const test = await Test.findByPk(testId, { transaction: t });
+    if (!test) {
+      return response.json({
+        message: 'Test not found'
+      });
+    }
+
+    const newScore = await Scores.create(
+      {
+        userId: userId,
+        testId: testId,
+        testCount: 0,
+        solvedCount: 0,
+        percentage: '0%'
+      },
+      { transaction: t }
+    );
+
+    if (selectedAnswer === test.trueAnswer) {
+      newScore.testCount++;
+      newScore.solvedCount++;
+      await newScore.save();
+    } else {
+      newScore.testCount++;
+      await newScore.save();
+    }
+
+    console.log(newScore);
+
+    return response.json({
+      message: 'Test completed',
+      newScore: newScore
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
 
 const createTest = async (request , response , next ) =>{
 
@@ -92,7 +93,7 @@ const createTest = async (request , response , next ) =>{
         console.log(newTest)
         response.json({
             message :'Test created ',
-            newTheme:newTest
+            newTest:newTest
         })
     } catch (error) {
       console.log(error)
