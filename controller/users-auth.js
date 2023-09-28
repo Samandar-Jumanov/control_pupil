@@ -34,12 +34,14 @@ const SignUp =  async (request , response , next ) =>{
                 token : newUser.token,
                 username : newUser.username 
             }
+            console.log(newUser)
             return response.json({
                 message :'User created succefully',
                 user : newUserInfo
             })
 
     } catch (error) {
+        console.log(error)
         next(error)
     }
 }
@@ -78,12 +80,15 @@ const Login = async (request , response , next ) =>{
            token : existingUser.token ,
            userId : existingUser.id 
         }
+
+        console.log(existingUser)
         return response.json({
             message :"Logged in succefully",
             user: userInfo
         })
     } catch (error) {
-        
+        console.log(error)
+        next(error)
     }
 }
 
