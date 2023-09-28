@@ -22,14 +22,14 @@ app.get('/', (request , response , next )=>{
 })
 
 app.use(express.json())
-app.use('/users', usersAuthRouter)
+app.use('/users', usersAuthRouter) //checked all worked 
 app.use('/tests', userTestRouter)
 
 //admin routing 
 app.use('/admin/tests', adminTestRouter)
-app.use('/admin/auth', adminAuthRouter)
+app.use('/admin/auth', adminAuthRouter) //checked all worked 
 app.use('/admin/email',emailRouter )
-app.use('/admin/theme', themeRouter)
+app.use('/admin/theme', themeRouter) //checked all worked 
 app.use('/admin/user-score',userScoreRouter )
 
 //Admin side -------------------------

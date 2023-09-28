@@ -47,6 +47,7 @@ const createTest = async (request , response , next ) =>{
         })
 
     } catch (error) {
+        console.log(error)
         await t.rollback();
         next(error)
     }
