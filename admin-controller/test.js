@@ -8,7 +8,7 @@ const createTest = async (request , response , next ) =>{
     let t;
     try {
         t = await sequelize.transaction();
-        const theme = await TestThemes.findOne({where : {themeName}} , {transaction : t })
+        const theme = await TestThemes.findOne({where : { theme : themeName}} , {transaction : t })
         const admin = await Admin.findByPk(adminId)
 
         if(!admin){
