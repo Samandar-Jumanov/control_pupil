@@ -64,7 +64,10 @@ const SolveTest = async (request , response , next ) =>{
         newScore.testCount++
         await newScore.save()
         console.log(newScore)
-       return;
+       return response.json({
+        message :'Tested',
+        newScore : newScore 
+       })
 
     } catch (error) {
         console.log(error)
