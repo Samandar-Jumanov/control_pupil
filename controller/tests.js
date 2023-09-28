@@ -9,7 +9,11 @@ const getUserAllScores = async (request , response , next ) =>{
     const {userId} = request.params 
 
     try {
-        const user = await Users.findByPk(userId)
+        const user = await Users.findByPk(userId, {
+            include :[{
+                model :Scores , as :'scores'
+            }]
+        })
 
         if(!user){
             return response.json({
