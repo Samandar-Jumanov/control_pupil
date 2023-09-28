@@ -34,7 +34,7 @@ TestThemes.hasMany(Test, {
     as :'tests'
 })
 
-module.exports ={
+module.exports = {
     Test, 
     Users, 
     TestThemes,

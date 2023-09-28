@@ -2,6 +2,9 @@ const {Users , Test, Scores} =  require('../models/relations')
 const sequelize = require('../utils/connect-db')
 
 
+
+
+
 const getUserAllScores = async (request , response , next ) =>{
     const {userId} = request.params 
 
@@ -68,5 +71,28 @@ const SolveTest = async (request , response , next ) =>{
     }
 }
 
+const createTest = async (request , response , next ) =>{
 
-module.exports = {SolveTest , getUserAllScores}
+    try {
+        const newTest = await Test.create({
+            themeId :1 ,
+            trueAnswer : "a",
+            question :'Find true answer',
+            a:'True answer',
+            b:'Wrong answer',
+            c:'Wrong answer',
+            d: 'Wrong answer',
+        })
+
+        console.log(newTest)
+        response.json({
+            message :'Test created ',
+            newTheme:newTest
+        })
+    } catch (error) {
+      console.log(error)
+    }
+
+}
+
+module.exports = {SolveTest , getUserAllScores , createTest}

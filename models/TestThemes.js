@@ -13,9 +13,10 @@ const TestThemes = sequelize.define('testTheme', {
        type : DataTypes.STRING ,
        allowNull : false 
     }, 
-    
-  
 })
+
+
+
 
 module.exports = TestThemes
 

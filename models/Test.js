@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../utils/connect-db");
 
 
-const Test = sequelize.define('Test', {
+const Test =  sequelize.define('Test', {
     id : {
         type : DataTypes.INTEGER,
         autoIncrement : true ,
@@ -37,5 +37,8 @@ const Test = sequelize.define('Test', {
         allowNull : false 
     }
 })
+
+
+
 
 module.exports = Test 
