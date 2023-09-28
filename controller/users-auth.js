@@ -16,7 +16,7 @@ const SignUp =  async (request , response , next ) =>{
                 message :'User has already account '
             })
         }
-        const hashedPassword = bcrypt.hash(password , 10)
+        const hashedPassword = await  bcrypt.hash(password , 10)
         const token = process.env.SECRETKEY
         const  newUser = await Users.create({
                 username : username ,
