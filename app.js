@@ -4,6 +4,7 @@ const app = express()
 const usersAuthRouter = require('./routes/users-auth')
 const testRouter = require('./routes/test')
 const sendMailRoute = require('./routes/mails')
+const themesRouter = require('./routes/themes')
 
 
 
@@ -21,6 +22,7 @@ app.use(express.json())
 app.use('/users', usersAuthRouter)
 app.use('/tests', testRouter)
 app.use('/mails', sendMailRoute)
+app.use('/theme', themesRouter)
 
 
 //Admin side -------------------------
