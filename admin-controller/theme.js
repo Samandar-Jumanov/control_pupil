@@ -36,8 +36,6 @@ const createTheme = async (request , response , next ) =>{
     }
 }
 
-module.exports = {
-    createTheme
-}
+module.exports = {createTheme}
 
 

@@ -3,11 +3,12 @@ const sequelize = require('./utils/connect-db')
 const app = express()
 const usersAuthRouter = require('./users-route/users-auth')
 const userTestRouter = require('./users-route/test')
-const adminTestRouter = require('./admin-router/tests')
-const adminAuthRouter = require('./admin-router/auth')
-const emailRouter = require('./admin-router/email')
-const themeRouter = require('./admin-router/theme')
-const userScoreRouter = require('./admin-router/users-score')
+
+const {adminTestRouter} = require('./admin-router/tests')
+const {adminAuthRouter} = require('./admin-router/auth')
+const {emailRouter} = require('./admin-router/email')
+const {themeRouter} = require('./admin-router/theme')
+const {userScoreRouter} = require('./admin-router/users-score')
 
 
 sequelize.sync().then(()=>{
