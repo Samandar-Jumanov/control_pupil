@@ -70,11 +70,14 @@ const SolveTest = async (request, response, next) => {
     }
     console.log(newScore);
     await newScore.save();
+    await user.addScores(newScore, {transaction : t })
+    await t.commit()
     return response.json({
       message: 'Test completed',
       newScore: newScore
     });
   } catch (error) {
+    await t.rollback();
     console.log(error);
     next(error);
   }
