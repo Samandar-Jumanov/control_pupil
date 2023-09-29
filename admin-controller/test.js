@@ -161,7 +161,7 @@ const deleteTest = async (request, response, next) => {
     }
 
     await test.destroy();
-    await admin.removeCreatedTests(test , {transaction : t })
+    // await admin.removeCreatedTests(test , {transaction : t })
     await admin.save()
     await t.commit();
     
