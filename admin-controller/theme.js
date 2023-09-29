@@ -86,7 +86,7 @@ const updateTheme = async (request, response, next) => {
 
   let t ;
   try {
-     t = await  sequelize.transaction();
+     t =  await  sequelize.transaction();
     const existingTheme = await TestThemes.findByPk(themeId);
     const admin =  await Admin.findByPk(theme.adminId , { transaction : t })
 
