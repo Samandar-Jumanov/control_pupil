@@ -81,8 +81,8 @@ const getThemeById = async (request, response, next) => {
 
 // Update a theme
 const updateTheme = async (request, response, next) => {
-  const { themeId , adminId  } = request.params;
-  const { theme   } = request.body;
+  const { themeId  } = request.params;
+  const { theme  ,  adminId   } = request.body;
 
   let t ;
   try {
@@ -124,13 +124,14 @@ const updateTheme = async (request, response, next) => {
 // Delete a theme
 const deleteTheme = async (request, response, next) => {
   const { themeId } = request.params;
+  const {adminId} = request.body
  let t ;
   try {
 
      t = await sequelize.transaction();
 
     const theme = await TestThemes.findByPk(themeId);
-    const admin = await Admin.findByPk(theme.adminId , { transaction : t })
+    const admin = await Admin.findByPk(adminId , { transaction : t })
 
     if(!admin){
         return response.json({

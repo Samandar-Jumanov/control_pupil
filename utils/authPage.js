@@ -2,7 +2,7 @@ const {Admin} = require("../models/relations");
 
 const authPage =  (requiredRoles) => {
   return async (request, response, next) => {
-    const { adminId } = request.params;
+    const { adminId } = request.body;
     const admin = await Admin.findByPk(adminId);
     const role = admin.role;
     if (!admin || !requiredRoles.includes(role)) {
