@@ -5,10 +5,10 @@ const { authPage } = require('../utils/authPage')
 
 
 adminTestRouter.post('/create-test',  authPage('admin', 'teacher'),   adminTestController.createTest) //creates 
-adminTestRouter.get('/get-all',  authPage('admin', 'teacher'),   adminTestController.getAllTests) //get all 
-adminTestRouter.get('/get/:testId',  authPage('admin', 'teacher'),   adminTestController.getTestById) //get by id 
-adminTestRouter.put('/update-test/:testId',  authPage('admin', 'teacher'),   adminTestController.updateTest) //update test
-adminTestRouter.delete('/delete-test/:testId',  authPage('admin', 'teacher'),   adminTestController.deleteTest) //delete  test
+adminTestRouter.get('/get-all',    adminTestController.getAllTests) //get all 
+adminTestRouter.get('/get/:testId',   adminTestController.getTestById) //get by id 
+adminTestRouter.put('/update-test/:testId',    adminTestController.updateTest) //update test
+adminTestRouter.delete('/delete-test/:testId',   adminTestController.deleteTest) //delete  test
 
 
 
