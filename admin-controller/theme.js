@@ -101,12 +101,15 @@ const updateTheme = async (request, response, next) => {
       });
     }
 
+    console.log(existingTheme)
     const updatedTheme = await existingTheme.update({
       theme: theme,
     }  , { transaction : t });
 
+    console.log(updatedTheme)
     await admin.save();
     await updatedTheme.save();
+    console.log(admin)
     await t.commit();
 
     response.status(200).json({
