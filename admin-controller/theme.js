@@ -27,7 +27,7 @@ const createTheme = async (request, response, next) => {
     }
 
     const newTheme = await TestThemes.create({
-      theme: theme,
+      theme: themeName,
       adminId: adminId,
     } , { transaction : t }) ;
 
