@@ -83,7 +83,7 @@ const getThemeById = async (request, response, next) => {
 // Update a theme
 const updateTheme = async (request, response, next) => {
     const { themeId } = request.params;
-    const { theme, adminId } = request.body;
+    const { updatedTheName, adminId } = request.body;
   
     let t;
     try {
@@ -107,7 +107,7 @@ const updateTheme = async (request, response, next) => {
   
       await existingTheme.update(
         {
-          theme: theme,
+          theme: updatedTheName,
         },
         { transaction: t }
       );
@@ -120,7 +120,7 @@ const updateTheme = async (request, response, next) => {
       });
   
       await t.commit();
-    } catch (error) {
+    } catch (error) {g
       console.log(error);
       await t.rollback();
       next(error);
