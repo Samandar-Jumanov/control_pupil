@@ -43,6 +43,12 @@ app.use('/admin/user-score',userScoreRouter )
 //auth (such as login , signup )
 
 
+//middlewares 
+//users authEmail working 
+
+//authPage is not working 
+
+
 
 app.listen(3001 , ()=>{
     console.log('Server is running ')
