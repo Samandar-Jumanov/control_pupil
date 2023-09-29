@@ -3,13 +3,13 @@ const sequelize = require("../utils/connect-db");
 
 // Create a theme
 const createTheme = async (request, response, next) => {
-  const { theme, adminId } = request.body;
+  const { themeName , adminId } = request.body;
  
   let t ; 
   try {
     t = sequelize.transaction();
     const existingTheme = await TestThemes.findOne({
-      where: { theme },
+      where: { theme : themeName },
     } , { transaction : t });
 
     const admin = await Admin.findByPk(adminId);
