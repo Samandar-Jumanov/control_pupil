@@ -6,7 +6,7 @@ themeRouter.post('/create-theme',  authPage('admin', 'teacher'),    themeControl
 themeRouter.get('/get-all',     themeController.getAllThemes)  // get all themes
 themeRouter.get('/get-theme/:themeId',    themeController.getThemeById) // get theme by id 
 themeRouter.put('/update-theme/:themeId',  themeController.updateTheme) // update theme 
-themeRouter.delete('/delete-theme/:themeId/:adminId',   themeController.deleteTheme) //  delete them 
+themeRouter.delete('/delete-theme/:themeId',   themeController.deleteTheme) //  delete them 
 
 
 module.exports = {themeRouter}

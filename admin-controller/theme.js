@@ -128,45 +128,45 @@ const updateTheme = async (request, response, next) => {
   };
   
 // Delete a theme
+
 const deleteTheme = async (request, response, next) => {
   const { themeId } = request.params;
-  const {adminId} = request.body
- let t ;
+  const { adminId } = request.body;
+  let t;
+
   try {
+    t = await sequelize.transaction();
 
-     t = await sequelize.transaction();
+    const theme = await TestThemes.findByPk(themeId , {transaction : t });
+    const admin = await Admin.findByPk(adminId, { transaction: t });
 
-    const theme = await TestThemes.findByPk(themeId);
-    const admin = await Admin.findByPk(adminId , { transaction : t })
-
-    if(!admin){
-        return response.json({
-            message  : "Admin not found "
-        })
+    if (!admin) {
+      return response.json({
+        message: "Admin not found",
+      });
     }
 
     if (!theme) {
       return response.json({
-        message: 'Theme not found',
+        message: "Theme not found",
       });
     }
-    
-    await admin.removeTestThemes(theme , { transaction : t })
-    await theme.destroy();
-    await admin.save()
+
+    await admin.removeTestThemes(theme, { transaction: t });
+    await theme.destroy({ transaction: t });
     await t.commit();
 
     response.status(200).json({
-      message: 'Theme deleted successfully',
+      message: "Theme deleted successfully",
     });
-
   } catch (error) {
-    console.log(error)
-    await t.rollback();
+    console.log(error);
+    if (t) {
+      await t.rollback();
+    }
     next(error);
   }
 };
-
 module.exports = {
   createTheme,
   getAllThemes,
