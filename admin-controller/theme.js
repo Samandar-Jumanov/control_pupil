@@ -80,50 +80,53 @@ const getThemeById = async (request, response, next) => {
 };
 
 // Update a theme
+// Update a theme
 const updateTheme = async (request, response, next) => {
-  const { themeId  } = request.params;
-  const { theme  ,  adminId   } = request.body;
-
-  let t ;
-  try {
-     t =  await  sequelize.transaction();
-    const existingTheme = await TestThemes.findByPk(themeId);
-    const admin =  await Admin.findByPk(adminId , { transaction : t })
-
-    if(!admin){
+    const { themeId } = request.params;
+    const { theme, adminId } = request.body;
+  
+    let t;
+    try {
+      t = await sequelize.transaction();
+  
+      const existingTheme = await TestThemes.findByPk(themeId);
+      if (!existingTheme) {
         return response.json({
-            message  : "Admin not found "
-        } )
-    }
-    if (!existingTheme) {
-      return response.json({
-        message: 'Theme not found',
+          message: 'Theme not found',
+        });
+      }
+  
+      const admin = await Admin.findByPk(adminId);
+      if (!admin) {
+        return response.json({
+          message: 'Admin not found',
+        });
+      }
+      
+      console.log(existingTheme);
+  
+      await existingTheme.update(
+        {
+          theme: theme,
+        },
+        { transaction: t }
+      );
+  
+      console.log(existingTheme);
+  
+      response.status(200).json({
+        message: 'Theme updated successfully',
+        theme: existingTheme,
       });
+  
+      await t.commit();
+    } catch (error) {
+      console.log(error);
+      await t.rollback();
+      next(error);
     }
-
-    console.log(existingTheme)
-    const updatedTheme = await existingTheme.update({
-      theme: theme,
-    }  , { transaction : t });
-
-    console.log(updatedTheme)
-    await admin.save();
-    await updatedTheme.save();
-    console.log(admin)
-    await t.commit();
-
-    response.status(200).json({
-      message: 'Theme updated successfully',
-      theme: updatedTheme,
-    });
-
-  } catch (error) {
-    console.log(error)
-    await t.rollback();
-    next(error);
-  }
-};
-
+  };
+  
 // Delete a theme
 const deleteTheme = async (request, response, next) => {
   const { themeId } = request.params;
