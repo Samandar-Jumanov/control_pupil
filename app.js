@@ -23,7 +23,7 @@ app.get('/', (request , response , next )=>{
 
 app.use(express.json())
 app.use('/users', usersAuthRouter) //checked all worked 
-app.use('/tests', userTestRouter) //...
+app.use('/tests', userTestRouter) //... 
 
 //admin routing 
 app.use('/admin/tests', adminTestRouter) //checked all worked 
@@ -33,10 +33,10 @@ app.use('/admin/theme', themeRouter) //checked all worked
 app.use('/admin/user-score',userScoreRouter )
 
 //Admin side -------------------------
-//to create a test , 
-//theme ,
-// sendEmail ,
-// able to get user info
+//tests / crud 
+//theme , //crud 
+// sendEmail , // post
+// able to get user info //get 
 
 //Pupil side 
 //to solve a test 

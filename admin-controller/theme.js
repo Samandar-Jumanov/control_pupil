@@ -1,41 +1,166 @@
 const {TestThemes, Admin} = require("../models/relations")
+const sequelize = require("../utils/connect-db");
 
-const createTheme = async (request , response , next ) =>{
-    const { theme , adminId } = request.body 
+// Create a theme
+const createTheme = async (request, response, next) => {
+  const { theme, adminId } = request.body;
+ 
+  let t ; 
+  try {
+    t = sequelize.transaction();
+    const existingTheme = await TestThemes.findOne({
+      where: { theme },
+    } , { transaction : t });
 
-    try {
-        const existingTheme = await TestThemes.findOne({
-            where : {theme}
-        })
-        const admin = await Admin.findByPk(adminId)
+    const admin = await Admin.findByPk(adminId);
 
-        if(!admin){
-            return response.json({
-                message :'Admin not found'
-            })
-        }
-        if(existingTheme){
-            return response.json({
-                message :' Theme already exists'
-            })
-        }
-        const newTheme = await TestThemes.create({
-            theme : theme ,
-            adminId : adminId
-        })
-        await admin.addTestThemes(newTheme)
-        await admin.save()
-        console.log(newTheme)
-        response.status(201).json({
-            message :' Theme created succefully',
-            theme : newTheme
-        })
-
-    } catch (error) {
-        next(error)
+    if (!admin) {
+      return response.json({
+        message: 'Admin not found',
+      });
     }
-}
 
-module.exports = {createTheme}
+    if (existingTheme) {
+      return response.json({
+        message: 'Theme already exists',
+      });
+    }
 
+    const newTheme = await TestThemes.create({
+      theme: theme,
+      adminId: adminId,
+    } , { transaction : t }) ;
 
+    await admin.addTestThemes(newTheme , { transaction : t });
+    await admin.save();
+    await t.commit();
+
+    response.status(201).json({
+      message: 'Theme created successfully',
+      theme: newTheme,
+    });
+  } catch (error) {
+    console.log(error)
+    await t.rollback();
+    next(error);
+  }
+};
+
+// Read all themes
+const getAllThemes = async (request, response, next) => {
+  try {
+    const themes = await TestThemes.findAll();
+    response.status(200).json({
+      themes,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Read a single theme by ID
+const getThemeById = async (request, response, next) => {
+  const { themeId } = request.params;
+
+  try {
+    const theme = await TestThemes.findByPk(themeId);
+    if (!theme) {
+      return response.json({
+        message: 'Theme not found',
+      });
+    }
+
+    response.status(200).json({
+      theme,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Update a theme
+const updateTheme = async (request, response, next) => {
+  const { themeId } = request.params;
+  const { theme } = request.body;
+
+  let t ;
+  try {
+     t = await  sequelize.transaction();
+    const existingTheme = await TestThemes.findByPk(themeId);
+    const admin =  await Admin.findByPk(theme.adminId , { transaction : t })
+
+    if(!admin){
+        return response.json({
+            message  : "Admin not found "
+        } )
+    }
+    if (!existingTheme) {
+      return response.json({
+        message: 'Theme not found',
+      });
+    }
+
+    const updatedTheme = await existingTheme.update({
+      theme: theme,
+    }  , { transaction : t });
+
+    await admin.save()
+    await t.commit();
+
+    response.status(200).json({
+      message: 'Theme updated successfully',
+      theme: updatedTheme,
+    });
+  } catch (error) {
+    console.log(error)
+    await t.rollback();
+    next(error);
+  }
+};
+
+// Delete a theme
+const deleteTheme = async (request, response, next) => {
+  const { themeId } = request.params;
+ let t ;
+  try {
+
+     t = await sequelize.transaction();
+
+    const theme = await TestThemes.findByPk(themeId);
+    const admin = await Admin.findByPk(theme.adminId , { transaction : t })
+
+    if(!admin){
+        return response.json({
+            message  : "Admin not found "
+        })
+    }
+
+    if (!theme) {
+      return response.json({
+        message: 'Theme not found',
+      });
+    }
+    
+    await admin.removeTestThemes(theme , { transaction : t })
+    await theme.destroy();
+    await admin.save()
+    await t.commit();
+
+    response.status(200).json({
+      message: 'Theme deleted successfully',
+    });
+
+  } catch (error) {
+    console.log(error)
+    await t.rollback();
+    next(error);
+  }
+};
+
+module.exports = {
+  createTheme,
+  getAllThemes,
+  getThemeById,
+  updateTheme,
+  deleteTheme,
+};
