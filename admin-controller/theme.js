@@ -83,7 +83,7 @@ const getThemeById = async (request, response, next) => {
 // Update a theme
 const updateTheme = async (request, response, next) => {
     const { themeId } = request.params;
-    const { updatedTheName, adminId } = request.body;
+    const { updatedThemName, adminId } = request.body;
   
     let t;
     try {
@@ -107,7 +107,7 @@ const updateTheme = async (request, response, next) => {
   
       await existingTheme.update(
         {
-          theme: updatedTheName,
+          theme: updatedThemName,
         },
         { transaction: t }
       );
