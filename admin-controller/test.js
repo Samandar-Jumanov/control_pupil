@@ -136,14 +136,14 @@ const updateTest = async (request, response, next) => {
 // Delete a test
 const deleteTest = async (request, response, next) => {
   const { testId } = request.params;
-
+  const {adminId } = request.body
   let t; 
   try {
 
     t = await sequelize.transaction();
 
     const test = await Test.findByPk(testId);
-    const admin = await Admin.findByPk(test.adminId , { transaction : t })
+    const admin = await Admin.findByPk( adminId, { transaction : t })
 
        
     if(!admin){
