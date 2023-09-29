@@ -7,7 +7,7 @@ const createTheme = async (request, response, next) => {
  
   let t ; 
   try {
-    t = sequelize.transaction();
+    t =  await sequelize.transaction();
     const existingTheme = await TestThemes.findOne({
       where: { theme : themeName },
     } , { transaction : t });
@@ -39,6 +39,7 @@ const createTheme = async (request, response, next) => {
       message: 'Theme created successfully',
       theme: newTheme,
     });
+
   } catch (error) {
     console.log(error)
     await t.rollback();
@@ -111,6 +112,7 @@ const updateTheme = async (request, response, next) => {
       message: 'Theme updated successfully',
       theme: updatedTheme,
     });
+
   } catch (error) {
     console.log(error)
     await t.rollback();
