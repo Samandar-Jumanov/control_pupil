@@ -1,14 +1,13 @@
 const checkAdminRole = (request, response, next) => {
-  const { adminrole } = request.headers;
+  const { role } = request.headers;
 
-  if (adminrole && adminrole === 'admin') {
-    
+  if (role && role === 'admin') {
     next();
   } else {
     response.status(403).json({
-      message: 'Unauthorized access..',
+      message: 'Unauthorized access.',
     });
   }
 };
 
-module.exports = {checkAdminRole}
+module.exports = { checkAdminRole }
