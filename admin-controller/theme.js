@@ -167,10 +167,33 @@ const deleteTheme = async (request, response, next) => {
     next(error);
   }
 }
+
+
+const getAllAdminThemes = async (request , response , next   ) =>{
+  const {adminId} = request.body
+
+  try {
+    const admin = await Admin.findByPk(adminId)
+    if(!admin){
+      return response.json({
+        message :' Admin not found '
+      })
+    }
+    const adminAllThemes = await admin.getTestThemes()
+    response.json({
+      allThemes : adminAllThemes
+    })
+
+  } catch (error) {
+    console.log(error)
+    next(error)
+  }
+}
 module.exports = {
   createTheme,
   getAllThemes,
   getThemeById,
   updateTheme,
   deleteTheme,
+  getAllAdminThemes
 };

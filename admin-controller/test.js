@@ -176,10 +176,29 @@ const deleteTest = async (request, response, next) => {
 };
 
 
+const getAllAdminTests = async (request , response , next ) =>{
+  const {adminId} = request.body 
+
+  try {
+    const admin = await Admin.findByPk(adminId)
+    const adminAllTests = await admin.getCreatedTests()
+
+    return response.json({
+      tests :adminAllTests
+    })
+    
+  } catch (error) {
+    console.log(error)
+    next(error)
+    
+  }
+}
+
 module.exports = {
   createTest,
   getAllTests,
   getTestById,
   updateTest,
   deleteTest,
+  getAllAdminTests
 };
