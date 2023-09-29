@@ -1,8 +1,8 @@
 const usersScoreController = require('../admin-controller/user-score')
 const userScoreRouter = require('express').Router()
-const { authPage } = require('../utils/authPage')
+const { checkAdminRole } = require('../utils/authPage')
 
 
-userScoreRouter.get('/get-all',  authPage('admin', 'teacher'),    usersScoreController.getAllUserScores)
+userScoreRouter.get('/get-all',  checkAdminRole,    usersScoreController.getAllUserScores)
 
 module.exports = {userScoreRouter}

@@ -1,17 +1,14 @@
-const {Admin} = require("../models/relations");
+const checkAdminRole = (request, response, next) => {
+  const { adminrole } = request.headers;
 
-const authPage =  (requiredRoles) => {
-  return async (request, response, next) => {
-    const { adminId } = request.body;
-    const admin = await Admin.findByPk(adminId);
-    const role = admin.role;
-    if (!admin || !requiredRoles.includes(role)) {
-      return response.status(401).json({
-        message: 'You have no access'
-      });
-    }
+  if (adminrole && adminrole === 'admin') {
+    
     next();
-  };
+  } else {
+    response.status(403).json({
+      message: 'Unauthorized access..',
+    });
+  }
 };
 
-module.exports = { authPage };
+module.exports = {checkAdminRole}
