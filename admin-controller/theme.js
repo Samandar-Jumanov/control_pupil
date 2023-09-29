@@ -81,14 +81,14 @@ const getThemeById = async (request, response, next) => {
 
 // Update a theme
 const updateTheme = async (request, response, next) => {
-  const { themeId } = request.params;
-  const { theme } = request.body;
+  const { themeId , adminId  } = request.params;
+  const { theme   } = request.body;
 
   let t ;
   try {
      t =  await  sequelize.transaction();
     const existingTheme = await TestThemes.findByPk(themeId);
-    const admin =  await Admin.findByPk(theme.adminId , { transaction : t })
+    const admin =  await Admin.findByPk(adminId , { transaction : t })
 
     if(!admin){
         return response.json({
