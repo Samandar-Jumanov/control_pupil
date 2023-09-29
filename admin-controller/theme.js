@@ -152,7 +152,7 @@ const deleteTheme = async (request, response, next) => {
       });
     }
 
-    await admin.removeTestThemes(theme, { transaction: t });
+    // await admin.removeTestThemes(theme, { transaction: t });
     await theme.destroy({ transaction: t });
     await t.commit();
 
@@ -166,7 +166,7 @@ const deleteTheme = async (request, response, next) => {
     }
     next(error);
   }
-};
+}
 module.exports = {
   createTheme,
   getAllThemes,
