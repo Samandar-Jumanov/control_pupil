@@ -3,8 +3,8 @@ const nodemailer = require('nodemailer')
 
 const sendEmail = async (request , response , next ) =>{
     const {to , body , subject } = request.body 
-
-    const email = "haad@gmail.com"
+ 
+    const email = "education_centre@gmail.com" //asuming education enter email
     try {
         const newEmail = await Emails.create({
             to : to ,
@@ -13,7 +13,6 @@ const sendEmail = async (request , response , next ) =>{
             from : email
         })
 
-        console.log(newEmail)
         const transPorter =  nodemailer.createTransport({
             host :'host',
             port : 587 ,
@@ -52,8 +51,8 @@ const getAllEmails = async (request , response , next ) =>{
     } catch (error) {
         next(error)
     }
-
 }
+
 
 
 module.exports = {sendEmail , getAllEmails}
