@@ -1,5 +1,8 @@
 const { Scores, Users } = require('../models/relations')
+const redis = require('redis')
+require('dotenv').config()
 
+const redisClient = redis.createClient({url :process.env.REDIS_URL})
 const getAllUserScores = async (request , response , next ) =>{
     try {
         const userAllScore = await Scores.findAll()
@@ -15,24 +18,41 @@ const getAllUserScores = async (request , response , next ) =>{
 
 
 
-const getSingUserScores = async (request, response , next ) =>{
+const getSingleUserScores = async (request, response , next ) =>{
     const {userId} = request.params
-
-
+   
     try {
-        const user = await Users.findByPk(userId , {
-            include: [Scores]
-        })
+        redisClient.get(`score?userId=${userId}`, async (err , data ) =>{
 
-        if(!user){
-            return response.status(404).json({
-                message :' User not found '
-            })
-        }
-        const userAllScore = await user.getScores()
-        return response.status(200).json({
-            userAllScore : userAllScore
-        })  
+
+
+            if(err) console.error(err)
+            if(data != nil ){
+                return response.json({
+                    data : JSON.parse(data)
+                })
+            }
+        
+            else {
+                const user = await Users.findByPk(userId , {
+                    include: [Scores]
+                })
+        
+                if(!user){
+                    return response.status(404).json({
+                        message :' User not found '
+                    })
+                }
+
+                const userAllScore = await user.getScores()
+                redisClient.setex(`score?userId=${userId}`, JSON.stringify(userAllScore))
+                return response.status(200).json({
+                    userAllScore : userAllScore
+                })  
+            }
+
+        })
+       
 
     } catch (error) {
         next(error)
@@ -40,4 +60,4 @@ const getSingUserScores = async (request, response , next ) =>{
     }
 }
 
-module.exports = {getAllUserScores , getSingUserScores}
+module.exports = {getAllUserScores , getSingleUserScores}
