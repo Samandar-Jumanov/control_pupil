@@ -41,26 +41,24 @@ const getSingleUserScores = async (request, response, next) => {
         
         redisClient.get(`score?userId=${userId}`, async (err, data) => {
             if (err) {
-                console.error('Miss');
-                return;
+                const userAllScore = await user.getScores();
+                redisClient.set(`score?userId=${userId}`, JSON.stringify(userAllScore));
+                console.log(userAllScore);
+                return  response.status(200).json({
+                    userAllScore: userAllScore
+                });
             }
+
             if (data) {
                 console.log('Hit');
                 response.json({
                     data: JSON.parse(data)
                 });
                 return;
-            } else {
-                const userAllScore = await user.getScores();
-                redisClient.set(`score?userId=${userId}`, JSON.stringify(userAllScore));
-                console.log(userAllScore);
-                response.status(200).json({
-                    userAllScore: userAllScore
-                });
-                return;
-            }
+            } 
+            
         });
-        
+
     } catch (error) {
         console.log(error);
         return response.status(500).json({
