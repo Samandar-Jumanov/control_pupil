@@ -1,7 +1,6 @@
 const { Scores, Users } = require('../models/relations')
 const redis = require('redis')
 require('dotenv').config()
-const redisClient = redis.createClient({url :process.env.REDIS_URL})
 
 
 const getAllUserScores = async (request , response , next ) =>{
@@ -23,7 +22,7 @@ const getSingleUserScores = async (request, response , next ) =>{
     const {userId} = request.params
    
     try {
-        await redisClient.connect()
+       const redisClient = await redis.createClient({url :process.env.REDIS_URL})
         redisClient.get(`score?userId=${userId}`, async (err , data ) =>{
 
             if(err) console.error(err)
