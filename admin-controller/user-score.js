@@ -50,7 +50,7 @@ const getSingleUserScores = async (request, response , next ) =>{
                 }
 
                 const userAllScore = await user.getScores()
-                redisClient.setex(`score?userId=${userId}`, JSON.stringify(userAllScore))
+                redisClient.set(`score?userId=${userId}`, JSON.stringify(userAllScore))
                 return response.status(200).json({
                     userAllScore : userAllScore
                 })  
@@ -60,6 +60,7 @@ const getSingleUserScores = async (request, response , next ) =>{
        
 
     } catch (error) {
+        console.log(error)
         next(error)
         
     }
