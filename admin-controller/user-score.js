@@ -44,7 +44,7 @@ const getSingleUserScores = async (request, response, next) => {
             }
             
             const userAllScore = await user.getScores();
-            await redisClient.set(`score?userId=${userId}`, JSON.stringify(userAllScore));
+            const settedData =  await redisClient.set(`score?userId=${userId}`, JSON.stringify(userAllScore));
             
             response.status(200).json({
                 userAllScore: userAllScore
