@@ -49,14 +49,14 @@ const getSingleUserScores = async (request, response, next) => {
                 });
             }
 
-            if (data) {
+            if (data != null) {
                 console.log('Hit');
                 response.json({
                     data: JSON.parse(data)
                 });
                 return;
             } 
-            
+
         });
 
     } catch (error) {
