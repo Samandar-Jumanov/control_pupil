@@ -67,4 +67,4 @@ const getSingleUserScores = async (request, response, next) => {
     }
 }
 
-module.exports = {getAllUserScores , getSingleUserScores}
+module.exports = {getAllUserScores , getSingleUserScores , redisClient}

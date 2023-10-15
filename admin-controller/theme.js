@@ -1,5 +1,6 @@
 const {TestThemes, Admin} = require("../models/relations")
 const sequelize = require("../utils/connect-db");
+const { redisClient } = require("./user-score");
 
 // Create a theme
 const createTheme = async (request, response, next) => {
@@ -50,10 +51,33 @@ const createTheme = async (request, response, next) => {
 // Read all themes
 const getAllThemes = async (request, response, next) => {
   try {
-    const themes = await TestThemes.findAll();
-    response.status(200).json({
-      themes,
-    });
+    redisClient.get(`themes`, async (err, data) => {
+
+      if(err){
+        return response.json({
+          message : err
+        })
+      }
+      if(data != null){
+
+        return response.json({
+          data: JSON.parse(data)
+        })
+        
+      }else {
+      const themes = await TestThemes.findAll();
+      redisClient.set(`themes`, JSON.stringify(themes));
+       return   response.status(200).json({
+          themes,
+        });
+
+      }
+
+
+    })
+
+  
+
   } catch (error) {
     next(error);
   }
