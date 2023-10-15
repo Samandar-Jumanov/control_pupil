@@ -45,7 +45,9 @@ const getSingleUserScores = async (request, response , next ) =>{
         });
 
         const user = await Users.findByPk(userId, {
-            include: [Scores]
+            include: {
+                model : Scores , as :'scores'
+            }
         });
 
         if (!user) {
@@ -60,7 +62,7 @@ const getSingleUserScores = async (request, response , next ) =>{
         return response.status(200).json({
             userAllScore: userAllScore
         });
-        
+
     } catch (error) {
         console.log(error);
         return response.status(500).json({
