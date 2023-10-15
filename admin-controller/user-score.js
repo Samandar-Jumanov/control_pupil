@@ -1,8 +1,7 @@
 const { Scores, Users } = require('../models/relations')
 const {Redis} = require('ioredis')
 require('dotenv').config()
-const redisClient = new Redis(process.env.REDIS_URL)
-
+const redisClient = new Redis({url : process.env.REDIS_URL , legacyMode : true})
 
 const getAllUserScores = async (request , response , next ) =>{
     try {
@@ -21,17 +20,7 @@ const getAllUserScores = async (request , response , next ) =>{
 const getSingleUserScores = async (request, response, next) => {
     const { userId } = request.params;
     try {
-        const user = await Users.findByPk(userId, {
-            include: {
-                model: Scores,
-                as: 'scores'
-            }
-        });
-        if (!user) {
-            return response.status(404).json({
-                message: 'User not found'
-            });
-        }
+       
         
         redisClient.get(`score?userId=${userId}`, async (err, data) => {
             if (err) {
@@ -46,8 +35,19 @@ const getSingleUserScores = async (request, response, next) => {
                 });
                 return;
             } else {
+                const user = await Users.findByPk(userId, {
+                    include: {
+                        model: Scores,
+                        as: 'scores'
+                    }
+                });
+                if (!user) {
+                    return response.status(404).json({
+                        message: 'User not found'
+                    });
+                }
                 const userAllScore = await user.getScores();
-                redisClient.set(`score?userId=${userId}`, JSON.stringify(userAllScore));
+                redisClient.setex(`score?userId=${userId}`, 3600,  JSON.stringify(userAllScore));
                 return  response.status(200).json({
                     userAllScore: userAllScore
                 });
