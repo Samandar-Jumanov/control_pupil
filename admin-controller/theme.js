@@ -59,25 +59,17 @@ const getAllThemes = async (request, response, next) => {
         })
       }
       if(data != null){
-
         return response.json({
           data: JSON.parse(data)
         })
-        
-      }else {
+      } else {
       const themes = await TestThemes.findAll();
       redisClient.set(`themes`, JSON.stringify(themes));
        return   response.status(200).json({
           themes,
         });
-
       }
-
-
     })
-
-  
-
   } catch (error) {
     next(error);
   }

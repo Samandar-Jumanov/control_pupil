@@ -52,7 +52,7 @@ admin/tests/create-test     requirements : themeName, question, a, b, c, d, true
 
 # Themes  it has crud operation too 
 
-create theme : /admin/theme/create-theme , requirements :  themeName , adminId  body
+create theme : /admin/theme/create-theme , requirements :  themeName , adminId 
 get theme by its id : admin/theme/get-theme/:themeId requirements :  themeId request params 
 get all themes   admin/theme//get-all
  admin created themes : admin/theme/get-theme/:adminId  requirements : adminId request params 

@@ -1,7 +1,7 @@
 const { Scores, Users } = require('../models/relations')
-const redis = require('redis')
+const {Redis} = require('ioredis')
 require('dotenv').config()
-const redisClient =  redis.createClient({  legacyMode : true , url :process.env.REDIS_URL})
+const redisClient = new Redis(process.env.REDIS_URL)
 
 redisClient.connect().then(()=>{
     console.log('Redis Connected')
@@ -41,12 +41,8 @@ const getSingleUserScores = async (request, response, next) => {
         
         redisClient.get(`score?userId=${userId}`, async (err, data) => {
             if (err) {
-                const userAllScore = await user.getScores();
-                redisClient.set(`score?userId=${userId}`, JSON.stringify(userAllScore));
-                console.log(userAllScore);
-                return  response.status(200).json({
-                    userAllScore: userAllScore
-                });
+               console.log(err.stack);
+               console.log("Missing data");
             }
 
             if (data != null) {
@@ -55,8 +51,13 @@ const getSingleUserScores = async (request, response, next) => {
                     data: JSON.parse(data)
                 });
                 return;
-            } 
-
+            } else {
+                const userAllScore = await user.getScores();
+                redisClient.set(`score?userId=${userId}`, JSON.stringify(userAllScore));
+                return  response.status(200).json({
+                    userAllScore: userAllScore
+                });
+            }
         });
 
     } catch (error) {
