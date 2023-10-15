@@ -3,6 +3,12 @@ const redis = require('redis')
 require('dotenv').config()
 const redisClient =  redis.createClient({  legacyMode : true , url :process.env.REDIS_URL})
 
+redisClient.connect().then(()=>{
+    console.log('Redis Connected')
+}).catch((err)=>{
+    console.log(err)
+})
+
 
 const getAllUserScores = async (request , response , next ) =>{
     try {
