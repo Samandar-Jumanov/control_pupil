@@ -51,24 +51,18 @@ const createTheme = async (request, response, next) => {
 // Read all themes
 const getAllThemes = async (request, response, next) => {
   try {
-    redisClient.get(`themes`, async (err, data) => {
+   
+    const data = await redisClient.get(`themes`);
 
-      if(err){
-        return response.json({
-          message : err
-        })
-      }
-      if(data != null){
-        return response.json({
-          data: JSON.parse(data)
-        })
-      } else {
-      const themes = await TestThemes.findAll();
-      redisClient.set(`themes`, JSON.stringify(themes));
-       return   response.status(200).json({
-          themes,
-        });
-      }
+    if(data != null ){
+      return response.json({
+        data : JSON.parse(data)
+      })
+    }
+    const themes = await TestThemes.findAll();
+    const settedData =  await redisClient.set(`themes`, JSON.stringify(themes));
+    return response.status(200).json({
+      themes
     })
   } catch (error) {
     next(error);
