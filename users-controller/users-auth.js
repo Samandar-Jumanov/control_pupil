@@ -38,7 +38,6 @@ const SignUp =  async (request , response , next ) =>{
                 username : newUser.username ,
                 role : newUser.role 
             }
-            console.log(newUser)
             return response.json({
                 message :'User created succefully',
                 user : newUserInfo
@@ -84,8 +83,6 @@ const Login = async (request , response , next ) =>{
            token : existingUser.token ,
            userId : existingUser.id 
         }
-
-        console.log(existingUser)
         return response.json({
             message :"Logged in succefully",
             user: userInfo

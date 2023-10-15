@@ -38,6 +38,7 @@ const getSingleUserScores = async (request, response, next) => {
                 message: 'User not found'
             });
         }
+        
         redisClient.get(`score?userId=${userId}`, async (err, data) => {
             if (err) {
                 console.error('Miss');
@@ -59,6 +60,7 @@ const getSingleUserScores = async (request, response, next) => {
                 return;
             }
         });
+        
     } catch (error) {
         console.log(error);
         return response.status(500).json({
@@ -66,4 +68,5 @@ const getSingleUserScores = async (request, response, next) => {
         });
     }
 }
+
 module.exports = {getAllUserScores , getSingleUserScores}
