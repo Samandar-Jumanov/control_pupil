@@ -22,10 +22,8 @@ const getAllUserScores = async (request , response , next ) =>{
 
 const getSingleUserScores = async (request, response, next) => {
     const { userId } = request.params;
-    try {
-       
         
-        redisClient.get(`score?userId=${userId}`, async (err, data) => {
+        await redisClient.get(`score?userId=${userId}`, async (err, data) => {
             if (err) {
                console.log(err.stack);
                console.log("Missing data");
@@ -49,20 +47,15 @@ const getSingleUserScores = async (request, response, next) => {
                         message: 'User not found'
                     });
                 }
+                
                 const userAllScore = await user.getScores();
-                redisClient.set(`score?userId=${userId}`,  JSON.stringify(userAllScore));
+                await  redisClient.set(`score?userId=${userId}`,  JSON.stringify(userAllScore));
                 return  response.status(200).json({
                     userAllScore: userAllScore
                 });
             }
         });
 
-    } catch (error) {
-        console.log(error);
-        return response.status(500).json({
-            message: error
-        });
-    }
 }
 
 module.exports = {getAllUserScores , getSingleUserScores , redisClient}
