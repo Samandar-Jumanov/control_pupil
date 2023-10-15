@@ -3,12 +3,6 @@ const {Redis} = require('ioredis')
 require('dotenv').config()
 const redisClient = new Redis(process.env.REDIS_URL)
 
-redisClient.connect().then(()=>{
-    console.log('Redis Connected')
-}).catch((err)=>{
-    console.log(err)
-})
-
 
 const getAllUserScores = async (request , response , next ) =>{
     try {
