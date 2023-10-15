@@ -1,6 +1,6 @@
 const {TestThemes, Admin} = require("../models/relations")
 const sequelize = require("../utils/connect-db");
-const { redisClient } = require("./user-score");
+const { redisClient } = require("../utils/redis");
 
 // Create a theme
 const createTheme = async (request, response, next) => {

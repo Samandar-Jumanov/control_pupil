@@ -1,7 +1,10 @@
 const { Scores, Users } = require('../models/relations')
-const {Redis} = require('ioredis')
+const { redisClient } = require('../utils/redis')
 require('dotenv').config()
-const redisClient = new Redis({url : process.env.REDIS_URL , legacyMode : true})
+
+
+
+
 
 const getAllUserScores = async (request , response , next ) =>{
     try {
@@ -47,7 +50,7 @@ const getSingleUserScores = async (request, response, next) => {
                     });
                 }
                 const userAllScore = await user.getScores();
-                redisClient.setex(`score?userId=${userId}`, 3600,  JSON.stringify(userAllScore));
+                redisClient.set(`score?userId=${userId}`,  JSON.stringify(userAllScore));
                 return  response.status(200).json({
                     userAllScore: userAllScore
                 });
