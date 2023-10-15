@@ -37,28 +37,30 @@ const getSingleUserScores = async (request, response , next ) =>{
             }
     
             if (data) {
+                console.log(data)
                 return response.json({
                     data: JSON.parse(data)
                 });
-            } else {
-                const user = await Users.findByPk(userId, {
-                    include: [Scores]
-                });
-    
-                if (!user) {
-                    return response.status(404).json({
-                        message: 'User not found'
-                    });
-                }
-    
-                const userAllScore = await user.getScores();
-                redisClient.set(`score?userId=${userId}`, JSON.stringify(userAllScore));
-                return response.status(200).json({
-                    userAllScore: userAllScore
-                });
-            }
-
+            } 
         });
+
+        const user = await Users.findByPk(userId, {
+            include: [Scores]
+        });
+
+        if (!user) {
+            return response.status(404).json({
+                message: 'User not found'
+            });
+        }
+
+        const userAllScore = await user.getScores();
+        redisClient.set(`score?userId=${userId}`, JSON.stringify(userAllScore));
+        console.log(userAllScore)
+        return response.status(200).json({
+            userAllScore: userAllScore
+        });
+        
     } catch (error) {
         console.log(error);
         return response.status(500).json({
