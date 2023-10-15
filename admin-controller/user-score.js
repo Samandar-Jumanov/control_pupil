@@ -27,42 +27,43 @@ const getAllUserScores = async (request , response , next ) =>{
 
 const getSingleUserScores = async (request, response , next ) =>{
     const {userId} = request.params
-   
     try {
-        redisClient.get(`score?userId=${userId}`, async (err , data ) =>{
-
-            if(err) console.error(err)
-            if(data != nil ){
+        redisClient.get(`score?userId=${userId}`, async (err, data) => {
+            if (err) {
+                console.error(err);
+                return response.status(500).json({
+                    message: err
+                });
+            }
+    
+            if (data) {
                 return response.json({
-                    data : JSON.parse(data)
-                })
-            }
-        
-            else {
-                const user = await Users.findByPk(userId , {
+                    data: JSON.parse(data)
+                });
+            } else {
+                const user = await Users.findByPk(userId, {
                     include: [Scores]
-                })
-        
-                if(!user){
+                });
+    
+                if (!user) {
                     return response.status(404).json({
-                        message :' User not found '
-                    })
+                        message: 'User not found'
+                    });
                 }
-
-                const userAllScore = await user.getScores()
-                redisClient.set(`score?userId=${userId}`, JSON.stringify(userAllScore))
+    
+                const userAllScore = await user.getScores();
+                redisClient.set(`score?userId=${userId}`, JSON.stringify(userAllScore));
                 return response.status(200).json({
-                    userAllScore : userAllScore
-                })  
+                    userAllScore: userAllScore
+                });
             }
 
-        })
-       
-
+        });
     } catch (error) {
-        console.log(error)
-        next(error)
-        
+        console.log(error);
+        return response.status(500).json({
+            message: error
+        });
     }
 }
 
