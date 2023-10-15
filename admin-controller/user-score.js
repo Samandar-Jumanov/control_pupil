@@ -24,45 +24,41 @@ const getAllUserScores = async (request , response , next ) =>{
 }
 
 
-
-const getSingleUserScores = async (request, response , next ) =>{
-    const {userId} = request.params
+const getSingleUserScores = async (request, response, next) => {
+    const { userId } = request.params;
     try {
         const user = await Users.findByPk(userId, {
             include: {
-                model : Scores , as :'scores'
+                model: Scores,
+                as: 'scores'
             }
         });
-
         if (!user) {
             return response.status(404).json({
                 message: 'User not found'
             });
         }
-
         redisClient.get(`score?userId=${userId}`, async (err, data) => {
             if (err) {
                 console.error('Miss');
-                return
+                return;
             }
-    
             if (data) {
-                console.log(data)
+                console.log('Hit');
                 response.json({
                     data: JSON.parse(data)
                 });
                 return;
             } else {
-            const userAllScore = await user.getScores();
-            redisClient.set(`score?userId=${userId}`, JSON.stringify(userAllScore));
-            console.log(userAllScore)
-            response.status(200).json({
-                userAllScore: userAllScore
-            });
-            return;
+                const userAllScore = await user.getScores();
+                redisClient.set(`score?userId=${userId}`, JSON.stringify(userAllScore));
+                console.log(userAllScore);
+                response.status(200).json({
+                    userAllScore: userAllScore
+                });
+                return;
             }
         });
-
     } catch (error) {
         console.log(error);
         return response.status(500).json({
@@ -70,5 +66,4 @@ const getSingleUserScores = async (request, response , next ) =>{
         });
     }
 }
-
 module.exports = {getAllUserScores , getSingleUserScores}
