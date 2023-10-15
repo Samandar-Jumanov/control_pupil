@@ -28,22 +28,6 @@ const getAllUserScores = async (request , response , next ) =>{
 const getSingleUserScores = async (request, response , next ) =>{
     const {userId} = request.params
     try {
-        redisClient.get(`score?userId=${userId}`, async (err, data) => {
-            if (err) {
-                console.error(err);
-                return response.status(500).json({
-                    message: err
-                });
-            }
-    
-            if (data) {
-                console.log(data)
-                return response.json({
-                    data: JSON.parse(data)
-                });
-            } 
-        });
-
         const user = await Users.findByPk(userId, {
             include: {
                 model : Scores , as :'scores'
@@ -56,11 +40,26 @@ const getSingleUserScores = async (request, response , next ) =>{
             });
         }
 
-        const userAllScore = await user.getScores();
-        redisClient.set(`score?userId=${userId}`, JSON.stringify(userAllScore));
-        console.log(userAllScore)
-        return response.status(200).json({
-            userAllScore: userAllScore
+
+        redisClient.get(`score?userId=${userId}`, async (err, data) => {
+            if (err) {
+                console.error('Miss');
+               
+            }
+    
+            if (data) {
+                console.log(data)
+                return response.json({
+                    data: JSON.parse(data)
+                });
+            } 
+            const userAllScore = await user.getScores();
+            redisClient.set(`score?userId=${userId}`, JSON.stringify(userAllScore));
+            console.log(userAllScore)
+            return response.status(200).json({
+                userAllScore: userAllScore
+            });
+
         });
 
     } catch (error) {
